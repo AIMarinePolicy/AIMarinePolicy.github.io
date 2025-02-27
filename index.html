@@ -21,8 +21,11 @@
     }
     header img {
       max-width: 150px;
+      height: 150px; /* Ensure it's square */
       display: block;
       margin: 0 auto 15px;
+      border-radius: 50%;
+      object-fit: cover; /* Ensures the image fills the circular shape */
     }
     nav {
       display: flex;
