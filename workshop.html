@@ -84,6 +84,18 @@
       color: white;
       font-size: 14px;
     }
+
+    /* Footer links: Underlined by default, lose underline on hover */
+    footer a {
+      color: white;
+      text-decoration: underline;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #f1c40f; /* Changes the colour on hover */
+      text-decoration: none; /* Removes the underline on hover */
+    }
   </style>
 </head>
 <body>
@@ -171,17 +183,13 @@
     </table>
   </section>
 
-<footer>
+  <footer>
     <p>&copy; 2025 Artificial Intelligence & Marine Environmental Policy Project | Supported by an ELS Academy Grant</p>
     <p>Contact: 
-       <a href="mailto:h.jbmarcos@maastrichtuniversity.nl" style="color: white; text-decoration: none;">
-          h.jbmarcos@maastrichtuniversity.nl
-       </a> & 
-       <a href="mailto:r.nanda@maastrichtuniversity.nl" style="color: white; text-decoration: none;">
-          r.nanda@maastrichtuniversity.nl
-       </a>
+       <a href="mailto:h.jbmarcos@maastrichtuniversity.nl">h.jbmarcos@maastrichtuniversity.nl</a> & 
+       <a href="mailto:r.nanda@maastrichtuniversity.nl">r.nanda@maastrichtuniversity.nl</a>
     </p>
-</footer>
+  </footer>
 
 </body>
 </html>
