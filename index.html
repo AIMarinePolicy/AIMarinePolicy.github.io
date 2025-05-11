@@ -21,14 +21,15 @@
     }
     header img {
       max-width: 300px;
-      height: 300px; /* Ensure it's square */
+      height: 300px;
       display: block;
       margin: 0 auto 15px;
       border-radius: 50%;
-      object-fit: cover; /* Ensures the image fills the circular shape */
+      object-fit: cover;
     }
     nav {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       background: #2c3e50;
       padding: 15px;
@@ -37,7 +38,7 @@
       color: #ffffff;
       text-decoration: none;
       padding: 15px 20px;
-      margin: 0 10px;
+      margin: 5px 10px;
       font-size: 18px;
       font-weight: bold;
       transition: 0.3s;
@@ -68,17 +69,14 @@
       color: white;
       font-size: 14px;
     }
-    
-    /* Footer links: Underlined by default, lose underline on hover */
     footer a {
       color: white;
       text-decoration: underline;
       transition: color 0.3s ease, text-decoration 0.3s ease;
     }
-
     footer a:hover {
-      color: #f1c40f; /* Changes the colour on hover */
-      text-decoration: none; /* Removes the underline on hover */
+      color: #f1c40f;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -94,10 +92,12 @@
     <a href="#about">About</a>
     <a href="#objectives">Objectives</a>
     <a href="#methodology">Methodology</a>
-    <a href="#timeline">Timeline & Deliverables</a>
+    <!-- <a href="#timeline">Timeline & Deliverables</a> -->
     <a href="#news">News</a>
     <a href="workshop.html">Sensemaking Workshop</a>
     <a href="ProjectTeam.html">Project Team</a>
+    <a href="gratk_network_v4.html">GRATK Visualization</a>
+    <a href="nagoya_network_v4.html">Nagoya Visualization</a>
   </nav>
 
   <section id="about">
@@ -122,6 +122,7 @@
     </ul>
   </section>
 
+  <!--
   <section id="timeline">
     <h2>Timeline & Deliverables</h2>
     <p>Key milestones:</p>
@@ -131,6 +132,7 @@
       <li>Dec 2025: Submission of Project Results for Publication</li>
     </ul>
   </section>
+  -->
 
   <section id="news">
     <h2>News</h2>
