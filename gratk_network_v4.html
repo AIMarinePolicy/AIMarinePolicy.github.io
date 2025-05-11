@@ -1,0 +1,221 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"size": 10}, "group": "actor", "id": "Patent Office", "label": "Patent Office", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Contracting Party to GRATK", "label": "Contracting Party to GRATK", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Global Research Community", "label": "Global Research Community", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Global Community", "label": "Global Community", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Patent Applicant", "label": "Patent Applicant", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Indigenous/Local Communities", "label": "Indigenous/Local Communities", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "actor", "id": "Assembly of Contracting Parties to GRATK", "label": "Assembly of Contracting Parties to GRATK", "shape": "ellipse", "size": 20, "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must disclose the country of origin to ensure transparency.", "label": "Duty: Must disclose the country of origin to ensure transparency.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.1(a)", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must disclose the source when the country of origin is unknown.", "label": "Duty: Must disclose the source when the country of origin is unknown.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.1(b)", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge.", "label": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.2(a)", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown.", "label": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.2(b)", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must declare, in good faith, when the required information is unknown.", "label": "Duty: Must declare, in good faith, when the required information is unknown.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.3", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must provide guidance to meet disclosure requirements.", "label": "Duty: Must provide guidance to meet disclosure requirements.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.4", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must allow corrections to meet disclosure requirements.", "label": "Duty: Must allow corrections to meet disclosure requirements.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.4", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must not require verification of the disclosed information.", "label": "Duty: Must not require verification of the disclosed information.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.5", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Immunity: Not obligated to verify the authenticity of disclosed information.", "label": "Immunity: Not obligated to verify the authenticity of disclosed information.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.5", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must make disclosed information available per patent procedures while protecting confidentiality.", "label": "Duty: Must make disclosed information available per patent procedures while protecting confidentiality.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 3.6", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must not impose retroactive disclosure obligations.", "label": "Duty: Must not impose retroactive disclosure obligations.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 4", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Immunity: Pre\u2011existing applications are exempt from new disclosure obligations.", "label": "Immunity: Pre\u2011existing applications are exempt from new disclosure obligations.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 4", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must establish measures to sanction non\u2011disclosure.", "label": "Duty: Must establish measures to sanction non\u2011disclosure.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 5.1", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must provide an opportunity to rectify failure to disclose.", "label": "Duty: Must provide an opportunity to rectify failure to disclose.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 5.2", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Power: May exclude the opportunity to rectify if fraudulent conduct is evident.", "label": "Power: May exclude the opportunity to rectify if fraudulent conduct is evident.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 5.2(bis)", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must not revoke or invalidate patent rights solely due to non\u2011disclosure.", "label": "Duty: Must not revoke or invalidate patent rights solely due to non\u2011disclosure.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 5.3", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Power: May impose post\u2011grant sanctions or remedies if fraudulent intent regarding disclosure is proven.", "label": "Power: May impose post\u2011grant sanctions or remedies if fraudulent intent regarding disclosure is proven.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 5.4", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Privilege: May establish information systems (e.g. databases) for genetic resources.", "label": "Privilege: May establish information systems (e.g. databases) for genetic resources.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 6.1", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Privilege: May establish information systems for traditional knowledge associated with genetic resources.", "label": "Privilege: May establish information systems for traditional knowledge associated with genetic resources.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 6.1", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must make information systems accessible for patent examination.", "label": "Duty: Must make information systems accessible for patent examination.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 6.2", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Power: May require authorization for access to information systems.", "label": "Power: May require authorization for access to information systems.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 6.2", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Power: May establish technical working groups to address matters related to information systems.", "label": "Power: May establish technical working groups to address matters related to information systems.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 6.3", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Duty: Must adopt measures necessary for effective implementation of the Treaty.", "label": "Duty: Must adopt measures necessary for effective implementation of the Treaty.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 9.1", "widthConstraint": {"maximum": 100}}, {"font": {"size": 10}, "group": "action", "id": "Liberty: Free to determine the appropriate method of implementing the Treaty within its legal system.", "label": "Liberty: Free to determine the appropriate method of implementing the Treaty within its legal system.", "shape": "box", "size": 20, "title": "Provisions: GRATK, Article 9.2", "widthConstraint": {"maximum": 100}}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the country of origin to ensure transparency."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the country of origin to ensure transparency.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the country of origin to ensure transparency."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the country of origin to ensure transparency.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the source when the country of origin is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the source when the country of origin is unknown.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the source when the country of origin is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the source when the country of origin is unknown.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the Indigenous Peoples or local community that provided the traditional knowledge.", "label": "Towards", "to": "Indigenous/Local Communities"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must disclose the source of traditional knowledge if the provider\u2019s identity is unknown.", "label": "Towards", "to": "Indigenous/Local Communities"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must declare, in good faith, when the required information is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must declare, in good faith, when the required information is unknown.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Duty: Must declare, in good faith, when the required information is unknown."}, {"arrows": "to", "color": "black", "from": "Duty: Must declare, in good faith, when the required information is unknown.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must provide guidance to meet disclosure requirements."}, {"arrows": "to", "color": "black", "from": "Duty: Must provide guidance to meet disclosure requirements.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must allow corrections to meet disclosure requirements."}, {"arrows": "to", "color": "black", "from": "Duty: Must allow corrections to meet disclosure requirements.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must not require verification of the disclosed information."}, {"arrows": "to", "color": "black", "from": "Duty: Must not require verification of the disclosed information.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Patent Office", "label": "Has", "to": "Immunity: Not obligated to verify the authenticity of disclosed information."}, {"arrows": "to", "color": "black", "from": "Immunity: Not obligated to verify the authenticity of disclosed information.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must make disclosed information available per patent procedures while protecting confidentiality."}, {"arrows": "to", "color": "black", "from": "Duty: Must make disclosed information available per patent procedures while protecting confidentiality.", "label": "Towards", "to": "Global Research Community"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must not impose retroactive disclosure obligations."}, {"arrows": "to", "color": "black", "from": "Duty: Must not impose retroactive disclosure obligations.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Patent Applicant", "label": "Has", "to": "Immunity: Pre\u2011existing applications are exempt from new disclosure obligations."}, {"arrows": "to", "color": "black", "from": "Immunity: Pre\u2011existing applications are exempt from new disclosure obligations.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must establish measures to sanction non\u2011disclosure."}, {"arrows": "to", "color": "black", "from": "Duty: Must establish measures to sanction non\u2011disclosure.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must provide an opportunity to rectify failure to disclose."}, {"arrows": "to", "color": "black", "from": "Duty: Must provide an opportunity to rectify failure to disclose.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Power: May exclude the opportunity to rectify if fraudulent conduct is evident."}, {"arrows": "to", "color": "black", "from": "Power: May exclude the opportunity to rectify if fraudulent conduct is evident.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must not revoke or invalidate patent rights solely due to non\u2011disclosure."}, {"arrows": "to", "color": "black", "from": "Duty: Must not revoke or invalidate patent rights solely due to non\u2011disclosure.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Power: May impose post\u2011grant sanctions or remedies if fraudulent intent regarding disclosure is proven."}, {"arrows": "to", "color": "black", "from": "Power: May impose post\u2011grant sanctions or remedies if fraudulent intent regarding disclosure is proven.", "label": "Towards", "to": "Patent Applicant"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Privilege: May establish information systems (e.g. databases) for genetic resources."}, {"arrows": "to", "color": "black", "from": "Privilege: May establish information systems (e.g. databases) for genetic resources.", "label": "Towards", "to": "Global Community"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Privilege: May establish information systems for traditional knowledge associated with genetic resources."}, {"arrows": "to", "color": "black", "from": "Privilege: May establish information systems for traditional knowledge associated with genetic resources.", "label": "Towards", "to": "Indigenous/Local Communities"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must make information systems accessible for patent examination."}, {"arrows": "to", "color": "black", "from": "Duty: Must make information systems accessible for patent examination.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Power: May require authorization for access to information systems."}, {"arrows": "to", "color": "black", "from": "Power: May require authorization for access to information systems.", "label": "Towards", "to": "Patent Office"}, {"arrows": "to", "color": "black", "from": "Assembly of Contracting Parties to GRATK", "label": "Has", "to": "Power: May establish technical working groups to address matters related to information systems."}, {"arrows": "to", "color": "black", "from": "Power: May establish technical working groups to address matters related to information systems.", "label": "Towards", "to": "Contracting Party to GRATK"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Duty: Must adopt measures necessary for effective implementation of the Treaty."}, {"arrows": "to", "color": "black", "from": "Duty: Must adopt measures necessary for effective implementation of the Treaty.", "label": "Towards", "to": "Global Community"}, {"arrows": "to", "color": "black", "from": "Contracting Party to GRATK", "label": "Has", "to": "Liberty: Free to determine the appropriate method of implementing the Treaty within its legal system."}, {"arrows": "to", "color": "black", "from": "Liberty: Free to determine the appropriate method of implementing the Treaty within its legal system.", "label": "Towards", "to": "Global Community"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+<style>
+  /* Custom style for the physics control panel */
+  #mynetwork-popUp {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      top: auto !important;
+      width: auto;
+      height: auto;
+      padding: 5px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 500;
+  }
+  #mynetwork-popUp .vis-button {
+      font-size: 10px;
+      padding: 2px 4px;
+  }
+</style>
+<div style="position: absolute; top: 10px; right: 10px; z-index: 1000;">
+  <input type="text" id="searchBox" placeholder="Search..." style="padding: 5px;">
+</div>
+<script type="text/javascript">
+  // Store original colors for all nodes.
+  var originalNodeColors = {};
+  network.body.data.nodes.get().forEach(function(node) {
+      originalNodeColors[node.id] = node.color;
+  });
+  
+  document.getElementById("searchBox").addEventListener("keyup", function() {
+      var searchText = this.value.toLowerCase();
+      network.body.data.nodes.get().forEach(function(node) {
+          if(searchText === ""){
+              // Reset to original color when search box is cleared.
+              network.body.data.nodes.update({id: node.id, color: originalNodeColors[node.id]});
+          } else {
+              var labelMatch = node.label.toLowerCase().includes(searchText);
+              var titleMatch = (node.title && node.title.toLowerCase().includes(searchText));
+              if(labelMatch || titleMatch) {
+                  network.body.data.nodes.update({id: node.id, color: 'pink'});
+              } else {
+                  // Keep original color for non-matching nodes.
+                  network.body.data.nodes.update({id: node.id, color: originalNodeColors[node.id]});
+              }
+          }
+      });
+  });
+</script>
+
+</body>
+</html>
